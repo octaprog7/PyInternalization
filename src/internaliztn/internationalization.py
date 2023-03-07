@@ -63,3 +63,40 @@ class CSVProvider(IDataProvider):
 
     def __len__(self):
         return len(self._vals)
+
+
+class SQLiteDataProvider(IDataProvider):
+    """SQLite internationalization data provider"""
+
+    def __init__(self, connection_string: str, key_field_name: str, lang: str, default_lang="EN"):
+        self._conn_str = connection_string
+        self._key_field = key_field_name
+        self._value_field = lang
+        self._vals = dict()
+        # заполнение словаря
+        try:
+            self._fill_stor(self._key_field, lang)
+        except IndexError:
+            pass
+        except LookupError:
+            pass
+        except ValueError:
+            pass
+        else:
+            return  # исключения не было!
+        # было исключение, возможно задан неверный язык локализации
+        # последняя попытка с языком по умолчанию
+        self._fill_stor(self._key_field, default_lang)
+
+    def _fill_stor(self, key: str, value: str):
+        self._vals.clear()
+        for k, v in self._get_fields_by_names((key, value)):
+            self._vals[k] = v
+
+    def _get_fields_by_names(self, column_names: [tuple, list], delimiter: str = ',') -> tuple:
+        """Итератор, который возвращает за каждый вызов кортеж из полей csv файла, имена которых (первая строка),
+        в виде строк, содержит последовательность field_names"""
+        ...
+
+    def __len__(self):
+        return len(self._vals)
