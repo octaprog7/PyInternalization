@@ -35,3 +35,19 @@
 ## Вам не нравятся CSV и SQLite
 Напишите новый класс, породив его от IDataProvider, пользуясь предоставленными CSVProvider и SQLiteDataProvider,
 как примерами.
+
+## Пример работы
+```
+CSV Provider:
+len: 25
+strEpilog: Если папка-источник не указана, в ее качестве используется текущий рабочий каталог!
+strIOErrors: Кол-во ошибок ввода/вывода
+strCalcul: CRC, вычисленная по содержимому файла
+
+SQLite Provider:
+len: 3
+strFirst: Première ligne
+strSecond: Deuxième ligne
+strTrird: Troisième ligne
+
+```
