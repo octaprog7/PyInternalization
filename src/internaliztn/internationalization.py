@@ -2,6 +2,7 @@
 Если что, я знаю про gettext"""
 from abc import ABC, abstractmethod
 import csv
+import sqlite3
 
 
 class IDataProvider(ABC):
@@ -76,9 +77,7 @@ class SQLiteDataProvider(IDataProvider):
         # заполнение словаря
         try:
             self._fill_stor(self._key_field, lang)
-        except IndexError:
-            pass
-        except LookupError:
+        except sqlite3.Error:
             pass
         except ValueError:
             pass
@@ -90,13 +89,20 @@ class SQLiteDataProvider(IDataProvider):
 
     def _fill_stor(self, key: str, value: str):
         self._vals.clear()
-        for k, v in self._get_fields_by_names((key, value)):
+        for k, v in self._get_fields_by_names(key, value):
             self._vals[k] = v
 
-    def _get_fields_by_names(self, column_names: [tuple, list], delimiter: str = ',') -> tuple:
+    def _get_fields_by_names(self, str_id_column_name: str, lang_column_name: str) -> tuple:
         """Итератор, который возвращает за каждый вызов кортеж из полей csv файла, имена которых (первая строка),
         в виде строк, содержит последовательность field_names"""
-        ...
+        with sqlite3.connect(f"file:{self._conn_str}?mode=ro") as connection:     # open as read only!
+            str_sql = f"select {str_id_column_name}, {lang_column_name} from istrings;"
+            for row in connection.execute(str_sql):
+                # кортеж значений строк нужных столбцов
+                yield row
+
+    def get_value(self, key: str) -> str:
+        return self._vals[key]
 
     def __len__(self):
         return len(self._vals)
