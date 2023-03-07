@@ -11,11 +11,13 @@ if __name__ == '__main__':
     provider = CSVProvider(db_fn, "strID", "RU")
     #
     print(f"len: {len(provider)}")
-    print(f"Epilog: {provider('strEpilog')}")
+    for string in ("strEpilog", "strIOErrors", "strCalcul"):
+        print(f"{string}: {provider(string)}")
 
     fn = "strings.db3"
     db_fn = f"{pth}{os.path.sep}{fn}"
-    print("SQLite Provider:")
+    print("\nSQLite Provider:")
     provider = SQLiteDataProvider(fn, "str_id", "FR")
     print(f"len: {len(provider)}")
-    print(f"strSecond: {provider('strSecond')}")
+    for string in ("strFirst", "strSecond", "strTrird"):
+        print(f"{string}: {provider(string)}")
