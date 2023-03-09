@@ -51,5 +51,8 @@ strSecond: Deuxième ligne
 strTrird: Troisième ligne
 
 ```
+Пример использования модуля интернационализации смотри по ссылке: 
+https://github.com/octaprog7/CalcFilesControlSum/blob/master/src/calc_files_control_sum/my_strings.py
+
 ## Заметки
 -   В качестве уникальных идентификаторов используйте имена переменных в вашем проекте. Эти строки должны быть уникальны! 
